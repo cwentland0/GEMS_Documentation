@@ -21,18 +21,18 @@
         \verb|calcROM| & \verb|.false.| & -- & If \verb|.true.|, attempt to run ROM simulation with parameters given in \verb|rom_gems_interface.inp| \\
         \verb|use_deim_res| & \verb|.false.| & -- & If \verb|.true.|, attempt to run ROM simulation with hyper-reduction. \\
         \verb|ndim| & -- & 2, 3 & Number of spatial dimensions. \\
-        \verb|ImpSolv| & \verb|.true.| & -- &  \\
-        \verb|InitialFromCFD| & \verb|.true.| & -- &  \\
-        \verb|ConsvQv| & \verb|.true.| & -- &  \\
-        \verb|ConsvEq| & \verb|.false.| & -- &  \\
-        \verb|chemImp| & \verb|.true.| & -- &  \\
-        \verb|SolVariable| & 1 & 1, 2 &  \\
+        \verb|ImpSolv| & \verb|.true.| & -- & If \verb|.true.|, use implicit BDF time integration scheme for ROM time advancement. If \verb|.false.|, use explicit RK4 scheme. \\
+        \verb|InitialFromCFD| & \verb|.true.| & -- & If \verb|.true.|, initialize full-order state from restart file or initial profile \textit{without projection}. If \verb|.false.|, initial condition is first projected onto trial space.  \\
+        \verb|ConsvQv| & \verb|.true.| & -- & If \verb|.true.|, trial basis represents conservative variables. If \verb|.false.|, trial basis represents other ``target'' variable set (e.g. primitive) \\
+        \verb|ConsvEq| & \verb|.false.| & -- & \color{red}{Mystery} \\
+        \verb|chemImp| & \verb|.true.| & -- & If \verb|.true.|, include source term Jacobian in LHS term. \\
+        \verb|SolVariable| & 1 & 1, 2 & If 1, target solution variables are pressure, velocity, temperature, and mass fractions. If 2, target solution variables are density, velocity, temperature, and mass fractions. Only relevant if \verb|ConsvQv = .false.|. \\
         \verb|ReconSoln|  & \verb|.false.| & -- &  \\
         \verb|EigenCheck| & \verb|.false.| & -- &  \\
         \verb|cfd_step| & 0 & $\ge 0$ &  \\
         \verb|TabChemSource| & \verb|.false.| & -- &  \\
         \verb|ModelChemSource| & \verb|.false.| & -- &  \\
-        \verb|coeffOutput| & \verb|.false.| & -- &  \\
+        \verb|coeffOutput| & \verb|.false.| & -- & If \verb|.true.|, outputs modal coefficient snapshots. Only valid for \verb|vector_format = .true.| \\
         \verb|DualTimeExpSolve| & \verb|.false.| & -- &  \\
         \bottomrule 
     \end{tabular}
@@ -45,33 +45,33 @@
         \toprule
         Parameter & Default & Range & Description \\
         \midrule
-        \verb|binary_format| &  &  &  \\
-        \verb|binary_format_deim| &  &  &  \\
-        \verb|parBasisRead| &  &  &  \\
-        \verb|BasisFolder| &  &  &  \\
-        \verb|BasisFileHead| &  &  &  \\
-        \verb|PinvBasisFileHead| &  &  &  \\
-        \verb|PinvBasisFileTail| &  &  &  \\
-        \verb|BasisFileTail| &  &  &  \\
-        \verb|romMean| &  &  &  \\
-        \verb|romNorm| &  &  &  \\
-        \verb|romIC| &  &  &  \\
-        \verb|romConsQvNorm| &  &  &  \\
-        \verb|dfd_file| &  &  &  \\
-        \verb|line_skip| &  &  &  \\
-        \verb|smallRomNorm| &  &  &  \\
-        \verb|romNormValue| &  &  &  \\
-        \verb|romNormValueCons| &  &  &  \\
-        \verb|InfMatrixFile| &  &  &  \\
-        \verb|SampleFileHead| &  &  &  \\
-        \verb|SampleFileTail| &  &  &  \\
-        \verb|ChemRateFolder| &  &  &  \\
-        \verb|ChemRateFileHead| &  &  &  \\
-        \verb|ChemRateFileTail| &  &  &  \\
-        \verb|ChemRateFileSkipLine| &  &  &  \\
-        \verb|sFaceFile| &  &  &  \\
-        \verb|nodeWeightFilePrefix| &  &  &  \\
-        \verb|sFaceIdxFilePrefix| &  &  &  \\
+        \verb|binary_format| & \verb|.false.| & -- &  \\
+        \verb|binary_format_deim| & \verb|.false.| & -- &  \\
+        \verb|parBasisRead| & \verb|.false.| & -- &  \\
+        \verb|BasisFolder| & -- & char(1000) &  \\
+        \verb|BasisFileHead| & -- & char(1000) &  \\
+        \verb|PinvBasisFileHead| & -- & char(1000) &  \\
+        \verb|PinvBasisFileTail| & -- & char(1000) &  \\
+        \verb|BasisFileTail| & -- & char(1000) &  \\
+        \verb|romMean| & -- & char(1000) &  \\
+        \verb|romNorm| & -- & char(1000) &  \\
+        \verb|romIC| & -- & char(1000) &  \\
+        \verb|romConsQvNorm| & -- & char(1000) &  \\
+        \verb|dfd_file| & -- & char(1000) &  \\
+        \verb|line_skip| & -- & $\ge 1$ &  \\
+        \verb|smallRomNorm| & \verb|.false.| & -- &  \\
+        \verb|romNormValue| & 0.0 & real(100) &  \\
+        \verb|romNormValueCons| & 0.0 & real(100) &  \\
+        \verb|InfMatrixFile| & -- & char(1000) &  \\
+        \verb|SampleFileHead| & -- & char(1000) &  \\
+        \verb|SampleFileTail| & -- & char(1000) &  \\
+        \verb|ChemRateFolder| & -- & char(1000) &  \\
+        \verb|ChemRateFileHead| & -- & char(1000) &  \\
+        \verb|ChemRateFileTail| & -- & char(1000) &  \\
+        \verb|ChemRateFileSkipLine| & -- & $\ge 1$ &  \\
+        \verb|sFaceFile| & -- & char(1000) &  \\
+        \verb|nodeWeightFilePrefix| & -- & char(1000) &  \\
+        \verb|sFaceIdxFilePrefix| & -- & char(1000) &  \\
         \bottomrule
     \end{tabular}
     \caption{\texttt{inputFormat}}
@@ -83,36 +83,35 @@
         \toprule
         Parameter & Default & Range & Description \\
         \midrule
-        \verb|meanSubtract| &  &  &  \\
-        \verb|vector_format| &  &  &  \\
-        \verb|ModeStart| &  &  &  \\
-        \verb|ModeIncre| &  &  &  \\
-        \verb|ModeEnd| &  &  &  \\
-        \verb|DEIM_Basis_Num| &  &  &  \\
-        \verb|VariableNum| &  &  &  \\
-        \verb|start_time_step| &  &  &  \\
-        \verb|imut| &  &  &  \\
-        \verb|romMethod| &  &  &  \\
-        \verb|a_diss| &  &  &  \\
-        \verb|limiter_factor| &  &  &  \\
-        \verb|PressureLimit| &  &  &  \\
-        \verb|TempLimit| &  &  &  \\
-        \verb|PressureBound| &  &  &  \\
-        \verb|TempBound| &  &  &  \\
-        \verb|uBound| &  &  &  \\
-        \verb|Filter| &  &  &  \\
-        \verb|VarFiltered| &  &  &  \\
-        \verb|VectorScalarHybrid| &  &  &  \\
-        \verb|grpNum| &  &  &  \\
-        \verb|igrpVar| &  &  &  \\
-        \verb|PartBasis| &  &  &  \\
-        \verb|MinTempLimiterProfile| &  &  &  \\
-        \verb|MaxTempLimiterProfile| &  &  &  \\
-        \verb|SpecThreshold| &  &  &  \\
-        \verb|SpeciesLimit| &  &  &  \\
-        \verb|rampPhysicalSteps| &  &  &  \\
-        \verb|rampIterSteps| &  &  &  \\
-        \verb|adaptive_basis| &  &  &  \\
+        \verb|meanSubtract| & \verb|.false.| & -- &  \\
+        \verb|vector_format| & \verb|.false.| & -- &  \\
+        \verb|ModeStart| & -- & $\ge 1$ &  \\
+        \verb|ModeIncre| & -- & $\ge 1$ &  \\
+        \verb|ModeEnd| & -- & $\ge 1$ &  \\
+        \verb|DEIM_Basis_Num| & -- & $\ge 1$ &  \\
+        \verb|VariableNum| & -- & $\ge 1$ &  \\
+        \verb|start_time_step| & -- & $\ge 0$ &  \\
+        \verb|imut| & 0.0 &  &  \\
+        \verb|romMethod| & 1 & 1, 2 &  \\
+        \verb|a_diss| & 0.0 &  &  \\
+        \verb|limiter_factor| & 1.0 &  &  \\
+        \verb|PressureLimit| & \verb|.false.| & -- &  \\
+        \verb|TempLimit| & \verb|.false.| & -- &  \\
+        \verb|PressureBound| & -- &  &  \\
+        \verb|TempBound| & -- &  &  \\
+        \verb|Filter| & 0 &  &  \\
+        \verb|VarFiltered| & 0 &  &  \\
+        \verb|VectorScalarHybrid| & \verb|.false.| & -- &  \\
+        \verb|grpNum| & -- & $\ge 1$ &  \\
+        \verb|igrpVar| & -- &  &  \\
+        \verb|PartBasis| & \verb|.false.| & -- &  \\
+        \verb|MinTempLimiterProfile| & -- & char(1000) &  \\
+        \verb|MaxTempLimiterProfile| & -- & char(1000) &  \\
+        \verb|SpecThreshold| & 0.0 &  &  \\
+        \verb|SpeciesLimit| & \verb|.false.| & -- &  \\
+        \verb|rampPhysicalSteps| & 0 &  &  \\
+        \verb|rampIterSteps| & 10 &  &  \\
+        \verb|adaptive_basis| & \verb|.false.| & -- &  \\
         \bottomrule 
     \end{tabular}
     \caption{\texttt{romParameters}}
