@@ -6,7 +6,147 @@
 
 \subsection{Inputs}
 
+\subsubsection{\texttt{gemsma.inp}}
+
+\subsubsection{\texttt{gemsma.inp.1}}
+
+\subsubsection{\texttt{rom\_gems\_interface.inp}}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{0.25\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.5\linewidth}}
+        \toprule
+        Parameter & Default & Range & Description \\
+        \midrule
+        \verb|calcROM| & \verb|.false.| & -- & If \verb|.true.|, attempt to run ROM simulation with parameters given in \verb|rom_gems_interface.inp| \\
+        \verb|use_deim_res| & \verb|.false.| & -- & If \verb|.true.|, attempt to run ROM simulation with hyper-reduction. \\
+        \verb|ndim| & -- & 2, 3 & Number of spatial dimensions. \\
+        \verb|ImpSolv| & \verb|.true.| & -- &  \\
+        \verb|InitialFromCFD| & \verb|.true.| & -- &  \\
+        \verb|ConsvQv| & \verb|.true.| & -- &  \\
+        \verb|ConsvEq| & \verb|.false.| & -- &  \\
+        \verb|chemImp| & \verb|.true.| & -- &  \\
+        \verb|SolVariable| & 1 & 1, 2 &  \\
+        \verb|ReconSoln|  & \verb|.false.| & -- &  \\
+        \verb|EigenCheck| & \verb|.false.| & -- &  \\
+        \verb|cfd_step| & 0 & $\ge 0$ &  \\
+        \verb|TabChemSource| & \verb|.false.| & -- &  \\
+        \verb|ModelChemSource| & \verb|.false.| & -- &  \\
+        \verb|coeffOutput| & \verb|.false.| & -- &  \\
+        \verb|DualTimeExpSolve| & \verb|.false.| & -- &  \\
+        \bottomrule 
+    \end{tabular}
+    \caption{\texttt{romInterface}}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{0.25\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.5\linewidth}}
+        \toprule
+        Parameter & Default & Range & Description \\
+        \midrule
+        \verb|binary_format| &  &  &  \\
+        \verb|binary_format_deim| &  &  &  \\
+        \verb|parBasisRead| &  &  &  \\
+        \verb|BasisFolder| &  &  &  \\
+        \verb|BasisFileHead| &  &  &  \\
+        \verb|PinvBasisFileHead| &  &  &  \\
+        \verb|PinvBasisFileTail| &  &  &  \\
+        \verb|BasisFileTail| &  &  &  \\
+        \verb|romMean| &  &  &  \\
+        \verb|romNorm| &  &  &  \\
+        \verb|romIC| &  &  &  \\
+        \verb|romConsQvNorm| &  &  &  \\
+        \verb|dfd_file| &  &  &  \\
+        \verb|line_skip| &  &  &  \\
+        \verb|smallRomNorm| &  &  &  \\
+        \verb|romNormValue| &  &  &  \\
+        \verb|romNormValueCons| &  &  &  \\
+        \verb|InfMatrixFile| &  &  &  \\
+        \verb|SampleFileHead| &  &  &  \\
+        \verb|SampleFileTail| &  &  &  \\
+        \verb|ChemRateFolder| &  &  &  \\
+        \verb|ChemRateFileHead| &  &  &  \\
+        \verb|ChemRateFileTail| &  &  &  \\
+        \verb|ChemRateFileSkipLine| &  &  &  \\
+        \verb|sFaceFile| &  &  &  \\
+        \verb|nodeWeightFilePrefix| &  &  &  \\
+        \verb|sFaceIdxFilePrefix| &  &  &  \\
+        \bottomrule
+    \end{tabular}
+    \caption{\texttt{inputFormat}}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.6\linewidth}}
+        \toprule
+        Parameter & Default & Range & Description \\
+        \midrule
+        \verb|meanSubtract| &  &  &  \\
+        \verb|vector_format| &  &  &  \\
+        \verb|ModeStart| &  &  &  \\
+        \verb|ModeIncre| &  &  &  \\
+        \verb|ModeEnd| &  &  &  \\
+        \verb|DEIM_Basis_Num| &  &  &  \\
+        \verb|VariableNum| &  &  &  \\
+        \verb|start_time_step| &  &  &  \\
+        \verb|imut| &  &  &  \\
+        \verb|romMethod| &  &  &  \\
+        \verb|a_diss| &  &  &  \\
+        \verb|limiter_factor| &  &  &  \\
+        \verb|PressureLimit| &  &  &  \\
+        \verb|TempLimit| &  &  &  \\
+        \verb|PressureBound| &  &  &  \\
+        \verb|TempBound| &  &  &  \\
+        \verb|uBound| &  &  &  \\
+        \verb|Filter| &  &  &  \\
+        \verb|VarFiltered| &  &  &  \\
+        \verb|VectorScalarHybrid| &  &  &  \\
+        \verb|grpNum| &  &  &  \\
+        \verb|igrpVar| &  &  &  \\
+        \verb|PartBasis| &  &  &  \\
+        \verb|MinTempLimiterProfile| &  &  &  \\
+        \verb|MaxTempLimiterProfile| &  &  &  \\
+        \verb|SpecThreshold| &  &  &  \\
+        \verb|SpeciesLimit| &  &  &  \\
+        \verb|rampPhysicalSteps| &  &  &  \\
+        \verb|rampIterSteps| &  &  &  \\
+        \verb|adaptive_basis| &  &  &  \\
+        \bottomrule 
+    \end{tabular}
+    \caption{\texttt{romParameters}}
+\end{table}
+
 \subsection{Reaction Model Inputs}
+
+\subsection{ROM Inputs}
+
+Here we detail formatting guidelines for inputs to ROM simulations in GEMS.  
+
+\subsubsection{Spatial Modes}
+
+Trial basis modes for linear subspace ROMs are separated into individual files, with each file representing a single mode. The directory they are located in is given by \verb|BasisFolder|, and the individual file names are the concatenation of \verb|BasisFileHead|, the mode number, and \verb|BasisFileTail|. For example, the fourth basis mode might be named \verb|Spatial_Mode_4.bin|, where \verb|BasisFileHead = Spatial_Mode_| and \verb|BasisFileTail = .bin|.
+
+Spatial mode files may be formatted as ASCII files or as raw binary files. If the spatial modes to be read in are ASCII files, set \verb|binary_format = .false.|. If they are binary files, set \verb|binary_format = .true.|. Note that parallel basis reading (designated with \verb|parBasisRead = .true.|) is only possible for binary spatial mode files.
+
+Both ASCII and binary spatial mode data follows a similar trend: records for individual degrees of freedom are first listed according to variable number, then by cell ID. That is, if there are $N_c$ in the domain, then the first $N_c$ records correspond to the components of the basis vector representing the first field variable (e.g. density or pressure), ordered by cell ID according to the ordering given by the mesh's \verb|dfd_cell.plt|. The next $N_c$ records correspond to the components of the basis vector representing the second field variable, and so on. An array representation might look like
+
+\begin{equation*}
+    \mathbf{v}_k = 
+    \begin{bmatrix}
+        v_{p,1} & \hdots & v_{p, N_c} & v_{u, 1} & \hdots & v_{u, N_c} & \hdots & v_{Y_{N_Y}, 1} & \hdots & v_{Y_{N_Y}, N_c} 
+    \end{bmatrix}^T
+\end{equation*}
+Note that the ordering of the variables must match the ordering of governing equations in GEMS (density/pressure, momentum/velocity, energy/temperature, turbulence equations, transported scalars).
+
+ASCII spatial mode files are read by first skipping the number of lines in the file specified by \verb|line_skip|. These first \verb|line_skip|-th records are completely ignored, and can be simple header lines. After that, numerical basis file data can be formatted however you like, as long as they are sequential numerical records. They will be automatically converted to the correct floating point precision.
+
+Binary spatial mode files \textit{must} begin with two 4-byte integers. Their value is irrelevant. All following data must be numerical records for the basis mode. The length of each record (in bytes) depends on the value of \verb|rfp| in \verb|gems_constant.f90|. This is 8-byte real by default, in which case each binary record must be 8 bytes.
+
+\subsubsection{Centering and Normalization Profiles}
+
+\subsubsection{Hyper-reduction Inputs}
 
 \subsection{Outputs}
 
