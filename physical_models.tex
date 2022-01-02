@@ -2,9 +2,388 @@
 
 \subsection{Equations of Motion}
 
-\subsection{Equations of State and Transport Properties}
+Let us consider a three-dimensional system with an arbitrary number of species. The vector of conserved variables is
+
+\begin{equation}
+	\consVec \triangleq \begin{pmatrix}
+		\rho & \rho u & \rho v & \rho w & \rho \stagEnth - p & \rho \mfSpec
+	\end{pmatrix}^\top,
+\end{equation}
+and the vector of primitive variables is
+
+\begin{equation}
+	\primVec \triangleq \begin{pmatrix}
+		p & u & v & w & T & \mfSpec
+	\end{pmatrix}^\top,
+\end{equation}
+where $\rho$ is density, $u_{\spatialIdx} \in \{u, v, w\}$ is velocity in the $\spatialIdx^{th}$ direction, $p$ is static pressure, $T$ is static temperature, $\stagEnth$ is stagnation enthalpy, and $\mfSpec$ is the mass fraction of the $\specIdx^{th}$ chemical species.
+
+The equations of motion, given by the Navier-Stokes equations, are
+
+\begin{equation}
+	\pde{\consVec}{\timeVar} + \pde{\invFluxDir}{\spatialVarDir} - \pde{\viscFluxDir}{\spatialVarDir} = \sourceVec,
+\end{equation}
+where the inviscid flux is \invFlux. The inviscid flux in the $\spatialIdx^{th}$ direction is
+
+\begin{equation}
+	\invFluxDir \triangleq \begin{pmatrix}
+		\rho u_{\spatialIdx} \\
+		\rho u u_{\spatialIdx} + \delta_{1 \spatialIdx} p \\
+		\rho v u_{\spatialIdx} + \delta_{2 \spatialIdx} p \\
+		\rho w u_{\spatialIdx} + \delta_{3 \spatialIdx} p \\
+		\rho u_{\spatialIdx} \stagEnth \\ 
+		\rho u_{\spatialIdx} \mfSpec
+	\end{pmatrix},
+\end{equation}
+and the viscous flux in the $\spatialIdx^{th}$ direction is
+
+\begin{equation}
+	\invFluxDir \triangleq \begin{pmatrix}
+		0 \\
+		\tau_{1 \spatialIdx} \\
+		\tau_{2 \spatialIdx} \\
+		\tau_{3 \spatialIdx} \\
+		u_{\spatialIdxTwo} \tau_{\spatialIdxTwo \spatialIdx} - q_{\spatialIdx} \\ 
+		- \rho \diffVelDir \mfSpec
+	\end{pmatrix}.
+\end{equation}
+The stagnation enthalpy is give by
+
+\begin{equation}
+	\stagEnth \triangleq \frac{1}{2}\left( u^2 + v^2 + w^2 \right) + \specSumAll \enthSpec \mfSpec
+\end{equation}
+The shear stress $\tau_{\spatialIdx \spatialIdxTwo}$ is given by
+
+\begin{equation}
+	\tau_{\spatialIdx \spatialIdxTwo} \triangleq \mu \left( \pde{u_{\spatialIdx}}{\spatialVar_{\spatialIdxTwo}} + \pde{u_{\spatialIdxTwo}}{\spatialVar_{\spatialIdx}} - \frac{2}{3} \pde{u_{\spatialIdxThree}}{\spatialVar_{\spatialIdxThree}} \delta_{\spatialIdx \spatialIdxTwo} \right).
+\end{equation}
+The heat flux in the $\spatialIdx^{th}$ direction is given by
+
+\begin{equation}
+	q_{\spatialIdx} \triangleq - \thermCond \pde{T}{\spatialVarDir} + \rho \specSumAll \diffVelDir \mfSpec \enthSpec
+\end{equation}
+The diffusion velocity term is approximated as
+
+\begin{equation}
+	\diffVelDir \mfSpec \approx - \massDiffSpec \pde{\mfSpec}{\spatialVarDir}.
+\end{equation}
+It is important to note that the definition of the diffusion velocity is an approximation, albeit a common one.
+
+The values of species enthalpies $\enthSpec$, mixture dynamic viscosity $\mu$, mixture thermal conductivity $\thermCond$, and mass diffusion coefficient $\massDiffSpec$ depend on the state model begin used, and are discussed in later sections.
 
 \subsection{Multispecies Formulation}
+
+In this section, the subscript $\specIdx$ will be used to denote the value of a particular quantity for a chemical species, while quantities without a subscript $\specIdx$ represent the mixture averaged quantity.
+
+Throughout this section, derivatives of certain quantities with respect to species mass fractions will leverage the fact that the species mass fractions must sum to unity. Several mixture quantities, using the dummy variable $\xi$ as an example, can be represented as 
+\begin{align}
+    \xi &= \specSumAll \mfSpec \xi_{\specIdx} \\
+    &= \specSumMOne \mfSpec \xi_{\specIdx} + \mf_{\numSpec} \xi_{\numSpec} \\
+    &= \specSumMOne \mfSpec \xi_{\specIdx} + \xi_{\numSpec} \left( 1 - \specSumMOne \mfSpec \right) \\ 
+    &= \xi_{\numSpec} + \specSumMOne \mfSpec (\xi_{\specIdx} - \xi_{\numSpec})
+\end{align}
+The derivatives of some quantity $\xi$ with respect to the first $\numSpec-1$ species mass fractions can often be simplified by using this format.
+
+\subsubsection{Mixing Rules for Chemical Compositions}
+
+The mixture molecular weight is given by
+
+\begin{equation}
+	\mw = \frac{1}{\specSumAll \mfSpec \mwSpec}
+\end{equation}
+The species mole fraction is given by
+
+\begin{equation}
+	\moleSpec = \mw \frac{\mfSpec}{\mwSpec}
+\end{equation}
+The species molar concentration is similarly given by
+
+\begin{equation}
+	\moleConcSpec = \rho \frac{\mfSpec}{\mwSpec}
+\end{equation}
+The gas constant is given by
+
+\begin{equation}
+	\gasConstSpec = \frac{\gasConstUniv}{\mwSpec}
+\end{equation}
+where $\gasConstUniv = 8314.4621 J/K-kmol$ is the universal gas constant. The mixture gas constant is given by
+
+\begin{equation}
+	\gasConst = \frac{\gasConstUniv}{\mw}
+\end{equation}
+
+\subsubsection{Mixing Rules for Thermodynamic Quantities}
+
+Equations for computing the mixture density, enthalpy, and entropy, along with their derivatives with respect to pressure, temperature, and species mass fractions, are given below. For specific equation of state assumptions, the equations may simplify.
+
+To begin, the mixture specific heat at constant pressure is given simply by
+
+\begin{equation}
+	\cp = \specSumAll \mfSpec \cpSpec
+\end{equation}
+
+\paragraph{Density} ~\\
+
+The mixture density is given by
+
+\begin{equation}
+	\rho = \left( \specSumAll \frac{\mfSpec}{\rho_{\specIdx}} \right)^{-1}	
+\end{equation}
+and the derivatives of density with respect to pressure, temperature, and the first $\numSpec - 1$ species mass fractions are given by
+
+\begin{alignat}{3}
+    &\rho_p &&\triangleq \pde{\rho}{p} &&= \specSumAll \left( \frac{\rho}{\rho_{\specIdx}} \right)^2 \mfSpec \rho_{p, \specIdx}, \\
+    &\rho_T &&\triangleq \pde{\rho}{T} &&= \specSumAll \left( \frac{\rho}{\rho_{\specIdx}} \right)^2 \mfSpec \rho_{T, \specIdx}, \\
+    &\rho_{\mfSpec} &&\triangleq \pde{\rho}{\mfSpec} &&= \rho^2 \left( \frac{1}{\rho_{\numSpec}} - \frac{1}{\rho_{\specIdx}} \right).
+\end{alignat}
+
+% CPG-specific
+% \begin{alignat}{3}
+%     &\rho_p &&\triangleq \pde{\rho}{p} &&= \frac{1}{\gasConst T} = \frac{\rho}{p}, \\
+%     &\rho_u &&\triangleq \pde{\rho}{u} &&= 0, \\
+%     &\rho_T &&\triangleq \pde{\rho}{T} &&= -\frac{p}{\gasConst T^2} = -\frac{\rho}{T}, \\
+%     &\rho_{\mfSpec} &&\triangleq \pde{\rho}{\mfSpec} &&= \rho \mw \left( \frac{1}{\mw_{\numSpec}} - \frac{1}{\mwSpec} \right).
+% \end{alignat}
+
+\paragraph{Enthalpy} ~\\
+
+The mixture enthalpy is given by
+
+\begin{equation}
+	\enth = \specSumAll \mfSpec \enthSpec
+\end{equation}
+and the derivatives of enthalpy with respect to pressure, temperature, and the first $\numSpec - 1$ species mass fractions are given by
+
+\begin{alignat}{3}
+    &\enth_p &&\triangleq \pde{\enth}{p} &&= \specSumAll \mfSpec \enth_{p,\specIdx}, \\
+    &\enth_T &&\triangleq \pde{\enth}{T} &&= \specSumAll \mfSpec \enth_{T,\specIdx}, \\
+    &\enth_{\mfSpec} &&\triangleq \pde{\enth}{\mfSpec} &&= \enthSpec - \enth_{\numSpec}.
+\end{alignat}
+
+Additionally, the stagnation enthalpy has a non-zero derivative with respect to the velocity in the $\spatialIdx^{th}$ direction
+\begin{equation}
+	\stagEnth_{u_\spatialIdx} \triangleq \pde{\stagEnth}{u_{\spatialIdx}} = u_{\spatialIdx}.
+\end{equation}
+
+\paragraph{Entropy} ~\\
+
+The mixture entropy is given by
+
+\begin{equation}
+	\entropy = \specSumAll \mfSpec \entropySpec,
+\end{equation}
+and the derivatives of entropy with respect to pressure, temperature, and the first $\numSpec - 1$ species mass fractions are given by
+
+\begin{alignat}{3}
+    &\entropy_p &&\triangleq \pde{\entropy}{p} &&= \specSumAll \mfSpec \entropy_{p,\specIdx}, \\
+    &\entropy_T &&\triangleq \pde{\entropy}{T} &&= \specSumAll \mfSpec \entropy_{T,\specIdx}, \\
+    &\entropy_{\mfSpec} &&\triangleq \pde{\entropy}{\mfSpec} &&= \entropySpec - \entropy_{\numSpec}.
+\end{alignat}
+
+\subsubsection{Mixing Rules for Transport Properties}
+
+The mixture viscosity is computed using Wilke's mixing law
+\begin{equation}
+	\mu = 2 \sqrt{2} \specSumAll \frac{\moleSpec \dynViscSpec}{\phi_\specIdx},
+\end{equation}
+where the denominator term is given by
+
+\begin{equation}
+	\phi_{\specIdx} = \specSumAllTwo \mole_{\specIdxTwo} \left( 1 + \left( \frac{\dynViscSpec}{\dynVisc_{\specIdxTwo}} \right)^{1/2} \left( \frac{\mw_\specIdxTwo}{\mwSpec} \right)^{1/4} \right)^2 \left( 1 + \frac{\mwSpec}{\mw_{\specIdxTwo}} \right)^{-1/2}
+\end{equation}
+The mixture thermal conductivity is computed from the mixing law of Mathur, Tondon, and Saxena,
+
+\begin{equation}
+	\thermCond = \frac{1}{2} \left( \specSumAll \moleSpec \thermCondSpec + \left(\specSumAll \frac{\moleSpec}{\thermCondSpec} \right)^{-1} \right).
+\end{equation}
+The diffusion of the $\specIdx^{th}$ species into the mixture ($\massDiffSpec$) is commonly referred to as the Hirshfelder and Curtiss approximation, and is calculated from the binary
+diffusion coefficients,
+
+\begin{equation}
+	\massDiffSpec = \frac{1 - \moleSpec}{\sum_{\specIdx \neq \specIdxTwo}^{\numSpec} \frac{\mole_{\specIdxTwo}}{\massDiffVar_{\specIdxTwo \specIdx}}}
+\end{equation}
+
+\subsubsection{Non-Newtonian Viscosity Treatments}
+
+There are several types in Non-Newtonian fluids depending on the rheology. GEMS currently incorporates the shear-thinning and thixotropic fluids. Shear-thinning represents the viscosity reduction with increasing the shear rate. The viscosity in the shear-thinning model is only a function of the shear rate. The shear-thinning fluid models extensively used in the Non-Newtonian community are power-law, Herschel-Bulkley, Carreau, Carreau-Yasuda models. Thixotropic fluid model considers the time-dependent viscosity behavior by the transport equation. The degree of
+shear-thinning and shear-thickening can be controlled by the rate constants. The viscosity from both fluid models is substituted into the generalized Newtonian constitutive equation so that the shear stress originated from the Non-Newtonian rheology can be included in the Navier-Stokes equations.
+
+\paragraph{Generalized Newtonian Constitutive Equation} ~\\
+
+\begin{align}
+	\tau_{\spatialIdx \spatialIdxTwo} &= -\eta(\dot{\gamma}, t) \dot{\gamma} \\
+	\dot{\gamma} &= \sqrt{\frac{\dot{\gamma}_{i j}: \dot{\gamma}_{i j}}{2}}
+\end{align}
+
+\paragraph{Shear-Thinning Models} ~\\
+
+\begin{alignat}{3}
+    &\text{Power law} &&: \eta(\dot{\gamma}) &&= K \dot{\gamma}^{n-1}, \\
+    &\text{Extended Herschel-Bulkley} &&: \eta(\dot{\gamma}) &&= \frac{\tau_0}{\dot{\gamma}} + K \dot{\gamma}^{n-1} + \eta_{\infty}, \\
+	&\text{Carreau} &&: \eta(\dot{\gamma}) &&= \eta_0 \left[ 1 + (\lambda \dot{\gamma})^2 \right]^{\frac{n-1}{2}}, \\
+	&\text{Carreau-Yasuda} &&: \frac{\eta(\dot{\gamma}) - \eta_\infty}{\eta_0 - \eta_\infty} &&= \left[1 + (\dot{\gamma \lambda}^a)\right]^{\frac{n-1}{a}}.
+\end{alignat}
+
+\paragraph{Thixotropic Model} ~\\
+
+\begin{equation}
+	\pde{\eta}{\timeVar} + u_{\spatialIdx} \pde{\eta}{\spatialVarDir} = \alpha \min (\eta_e - \eta, 0) + \beta \max (\eta_e - \eta, 0)
+\end{equation}
+
+\subsection{Equations of State and Transport Properties}
+
+In GEMS, equations of state are defined in terms of the temperature, pressure, and species mass fractions, e.g.
+
+\begin{equation}
+	\rho \triangleq \rho \left( T, p, \mfSpec \right).
+\end{equation}
+The equation of state will need to be defined such that the thermodynamic derivatives
+
+\begin{align}
+	\rho_{p} &\triangleq \pde{\rho}{p} \\
+	\rho_{T} &\triangleq \pde{\rho}{T} \\
+	\rho_{\mfSpec} &\triangleq \pde{\rho}{\mfSpec} \\
+\end{align}
+are readily available. GEMS supports the following equations of state:
+
+\begin{enumerate}
+	\item Calorically-perfect gas
+	\item Tabled fluid properties
+	\item NASA Fluid Properties, perfect gas assumption for density
+	\item ACIEOS tabled fluid properties
+	\item Incompressible Fluid for density, perfect-gas-like for enthalpy and transport
+	\item Incompressible fluid for density, NASA fluid properties for other variables
+	\item Perfect gas assumption for density and enthalpy, NASA properties for transport
+\end{enumerate}
+
+\subsubsection{Calorically-perfect Gas}\label{sec:cpg}
+
+To use a calorically-perfect gas, the user must supply several parameters for each chemical species, including the molecular weight $\mwSpec$, reference enthalpy $\refEnthSpec$, and the constant specific heat at constant pressure $\cpSpec$. For transport properties, the user can specify a constant viscosity $\dynViscSpec = \constViscSpec$, or the Sutherland parameters $\dynVisc_{0,\specIdx}$ and $T_{0,\specIdx}$, and Sutherland temperature $S_{\specIdx}$ to determine the viscosity
+from Sutherland's law. The Prandtl ($\prandtl_{\specIdx}$) and Schmidt ($\schmidt_{\specIdx}$) numbers are also required.
+
+The density is calculated using
+
+\begin{equation}
+	\rho = \frac{p \mw}{\gasConstUniv T},
+\end{equation}
+enthalpy is given by
+
+\begin{equation}
+	\enth = \refEnth + \cp T
+\end{equation}
+entropy is
+
+\begin{equation}
+	\entropy = \cp \ln(T) - \gasConst \ln(p)	
+\end{equation}
+If the viscosity is not assumed to be constant it is determined using Sutherland's law
+
+\begin{equation}
+	\dynViscSpec = \dynVisc_{0,\specIdx} \left(\frac{T}{T_{0,\specIdx}}\right)^{3/2} \frac{T_{0,\specIdx} + S_{\specIdx}}{T + S_{\specIdx}} 
+\end{equation}
+Thermal conductivity is determined from
+
+\begin{equation}
+	\thermCondSpec = \frac{\cpSpec \dynViscSpec}{\prandtl_{\specIdx}}
+\end{equation}
+and mass diffusivity is determined by
+
+\begin{equation}
+	\massDiffSpec = \frac{\dynViscSpec}{\rho \schmidt_{\specIdx}}
+\end{equation}
+
+\subsubsection{Tabled Fluid Properties}
+
+This option requires that the user provide a table of all necessary proprieties.
+
+\subsubsection{NASA Fluid Properties, Perfect Gas for Density}\label{sec:tpg}
+
+Density is calculated as in Section~\ref{sec:cpg}. The species specific heats at constant pressure, enthalpies, and entropies are found using the NASA polynomials
+
+\begin{align}
+	\frac{\cpSpec}{\gasConstSpec} &= \frac{a_1}{T^2} + \frac{a_2}{T} + a_3 + a_4 T + a_5 T^2 + a_6 T^3 + a_7 T^4 \\
+	\frac{\enthSpec}{\gasConstSpec T} &= -\frac{a_1}{T^2} + \frac{a_2}{T}\ln(T) + a_3 + \frac{a_4}{2} T + \frac{a_5}{3} T^2 + \frac{a_6}{4} T^3 + \frac{a_7}{5} T^4 + \frac{a_8}{T} \\
+	\frac{\entropySpec}{\gasConstSpec} &= -\frac{a_1}{2T^2} - \frac{a_2}{T} + a_3 \ln(T) + a_4 T + \frac{a_5}{2} T^2 + \frac{a_6}{3} T^3 + \frac{a_7}{4} T^4 + a_9
+\end{align}
+The constants $a_i, \ \forall \ i \in \{1..9\}$ are unique for each species.
+
+Viscosity and thermal conductivity are also found using polynomials, given by
+
+\begin{align}
+	\dynViscSpec &= \exp \left(b_1 \ln(T) + \frac{b_2}{T} + \frac{b_3}{T^2} + b_4 \right) \cdot 1 \times 10^{-7} \\
+	\thermCondSpec &= \exp \left(c_1 \ln(T) + \frac{c_2}{T} + \frac{c_3}{T^2} + c_4 \right) \cdot 1 \times 10^{-4}
+\end{align}
+As with the thermodynamic properties, the constants $b_i, \ c_i  \ \forall \ i \in \{1..4\}$ are unique for each species.
+
+The determination of the mass diffusivity is more involved. The binary diffusion coefficient of species $\specIdxTwo$ into species $\specIdx$ is,
+
+\begin{equation}
+	\massDiffVar_{\specIdxTwo \specIdx} = \frac{0.0266}{p(\sigma_{\specIdx} + \sigma_{\specIdxTwo})^2 \Omega_{d,\specIdxTwo \specIdx}} \sqrt{T^3 \left( \frac{1}{\mw_{\specIdxTwo}} + \frac{1}{\mwSpec} \right)^{-1}}
+\end{equation}
+
+Here $\sigma_{\specIdx}$ is the hard-sphere collision diameter of the $\specIdx^{th}$ species, and $\Omega_{d,\specIdxTwo \specIdx}$ is the Lennard--Jones potential between species $\specIdxTwo$ and species $\specIdx$. The Lennard--Jones potential is 
+
+\begin{equation}
+	\Omega_{d,\specIdxTwo \specIdx} = A (T^*)^{B} + C e^{DT^*} + E e^{FT^*} + G e^{HT^*},
+\end{equation}
+where the non-dimensional temperature $T^*$ is given by
+
+\begin{equation}\label{eq:lj_temp}
+	T^* = T \left( \frac{k_b}{\sqrt{\epsilon_{\specIdx} \epsilon_{\specIdxTwo}}} \right)
+\end{equation}
+Here, $k_B$ is Boltzmann's constant and $\epsilon_{\specIdx}$ is the Lennard--Jones energy of the $\specIdx^{th}$ species.
+
+The Lennard--Jones energies and hard-sphere collision diameters are tabulated for each species. Note that sometimes the Lennard--Jones energies are precomputed as $\epsilon_{\specIdx} / k_b$, which simplifies Eq.~\ref{eq:lj_temp}. The constants for the Lennard--Jones potential are given in Table~\ref{tab:lj_constants}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ll}
+		\toprule
+		Constant & Value \\
+		\midrule
+		A & 1.06036 \\
+		B & -0.15610 \\
+		C & 0.19300 \\
+		D & -0.47635 \\
+		E & 1.03587 \\
+		F & -1.52996 \\
+		G & 1.76474 \\
+		H & -3.89411 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Lennard-Jones potential constants}
+	\label{tab:lj_constants}
+\end{table}
+
+\subsubsection{ACIEOS Tabled Fluid Properties}
+
+For this fluid type a REFPROP-generated database is used.
+
+\subsubsection{Real Gas (Peng-Robinson)}
+
+\subsubsection{Incompressible Fluid for Density, Perfect-gas-like for Enthalpy and Transport}
+
+Density is constant
+
+\begin{equation}
+	\rho = \rho_0
+\end{equation}
+The remaining properties follow Section~\ref{sec:cpg}
+
+
+\subsubsection{Incompressible Fluid for Density, NASA Fluid Properties for
+Other Variables}
+
+Density is constant
+
+\begin{equation}
+	\rho = \rho_0
+\end{equation}
+The remaining properties follow Section~\ref{sec:tpg}
+
+\subsubsection{Perfect Gas for Density and Enthalpy, NASA Fluid Properties for Transport}
+
+Density and enthalpy follow Section~\ref{sec:cpg} while the remaining properties follow Section~\ref{sec:tpg}.
 
 \subsection{Turbulence Models}
 

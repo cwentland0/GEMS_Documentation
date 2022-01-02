@@ -1,0 +1,82 @@
+\newcommand{\MC}{\mathcal}
+
+% indices
+\newcommand{\spatialIdx}{\ensuremath{i}}
+\newcommand{\spatialIdxTwo}{\ensuremath{j}}
+\newcommand{\spatialIdxThree}{\ensuremath{k}}
+\newcommand{\specIdx}{\ensuremath{l}}
+\newcommand{\specIdxTwo}{\ensuremath{m}}
+
+% dimensions
+\newcommand{\numSpec}{\ensuremath{N_Y}}
+
+% spatial coordinates
+\newcommand{\spatialVar}{\ensuremath{x}}
+\newcommand{\spatialVarDir}{\ensuremath{\spatialVar_{\spatialIdx}}}
+
+% state variables
+\newcommand{\stateVar}{\ensuremath{Q}}
+\newcommand{\consVec}{\ensuremath{\mathbf{\stateVar}}}
+\newcommand{\primVec}{\ensuremath{\mathbf{\stateVar}_p}}
+
+% flux/source/RHS/residual functions
+\newcommand{\fluxVar}{\ensuremath{F}}
+\newcommand{\invFlux}{\ensuremath{\MC{\fluxVar}}}
+\newcommand{\viscFlux}{\ensuremath{\MC{\fluxVar}_v}}
+\newcommand{\invFluxDir}{\ensuremath{\MC{\fluxVar}_{\spatialIdx}}}
+\newcommand{\viscFluxDir}{\ensuremath{\MC{\fluxVar}_{v,\spatialIdx}}}
+\newcommand{\sourceVar}{\ensuremath{H}}
+\newcommand{\sourceVec}{\mathbf{\sourceVar}}
+
+% time
+\newcommand{\timeVar}{\text{t}}
+\newcommand{\dt}{\ensuremath{\Delta \timeVar}}
+\newcommand{\dtau}{\ensuremath{\Delta \tau}}
+
+% thermodynamic quantities
+\newcommand{\enth}{\ensuremath{h}}
+\newcommand{\stagEnth}{\ensuremath{\enth^0}}
+\newcommand{\enthSpec}{\ensuremath{\enth_{\specIdx}}}
+\newcommand{\refEnth}{\ensuremath{\enth_{\text{ref}}}}
+\newcommand{\refEnthSpec}{\ensuremath{\enth_{\text{ref,\specIdx}}}}
+\newcommand{\entropy}{\ensuremath{s}}
+\newcommand{\entropySpec}{\ensuremath{\entropy_{\specIdx}}}
+\newcommand{\cp}{\ensuremath{c_{p}}}
+\newcommand{\cpSpec}{\ensuremath{c_{p,\specIdx}}}
+
+% transport quantities
+\newcommand{\diffVelVar}{\ensuremath{V}}
+\newcommand{\diffVelDir}{\ensuremath{\diffVelVar_{\spatialIdx, \specIdx}}}
+\newcommand{\massDiffVar}{\ensuremath{D}}
+\newcommand{\massDiffSpec}{\ensuremath{\massDiffVar_{\specIdx M}}}
+\newcommand{\dynVisc}{\ensuremath{\mu}}
+\newcommand{\dynViscSpec}{\ensuremath{\dynVisc_{\specIdx}}}
+\newcommand{\constVisc}{\ensuremath{\overline{\dynVisc}}}
+\newcommand{\constViscSpec}{\ensuremath{\constVisc_{\specIdx}}}
+\newcommand{\thermCond}{\ensuremath{\lambda}}
+\newcommand{\thermCondSpec}{\ensuremath{\thermCond_{\specIdx}}}
+
+% chemical quantities
+\newcommand{\mf}{\ensuremath{Y}}
+\newcommand{\mfSpec}{\ensuremath{\mf_{\specIdx}}}
+\newcommand{\mole}{\ensuremath{X}}
+\newcommand{\moleSpec}{\ensuremath{\mole_{\specIdx}}}
+\newcommand{\moleConcSpec}{\ensuremath{[\moleSpec]}}
+\newcommand{\mw}{\ensuremath{W}}
+\newcommand{\mwSpec}{\ensuremath{\mw_{\specIdx}}}
+\newcommand{\gasConst}{\ensuremath{R}}
+\newcommand{\gasConstSpec}{\ensuremath{R_{\specIdx}}}
+\newcommand{\gasConstUniv}{\ensuremath{R_u}}
+
+% summations
+\newcommand{\specSumAll}{\ensuremath{\sum_{\specIdx = 1}^{\numSpec}}}
+\newcommand{\specSumMOne}{\ensuremath{\sum_{\specIdx = 1}^{\numSpec-1}}}
+\newcommand{\specSumAllTwo}{\ensuremath{\sum_{\specIdxTwo = 1}^{\numSpec}}}
+
+% non-dimensional quantities
+\newcommand{\prandtl}{\ensuremath{\text{Pr}}}
+\newcommand{\schmidt}{\ensuremath{\text{Sc}}}
+
+% derivatives
+\newcommand{\ode}[2]{\frac{\text{d} #1}{\text{d} #2}}
+\newcommand{\pde}[2]{\frac{\partial #1}{\partial #2}}
